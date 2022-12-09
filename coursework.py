@@ -16,13 +16,22 @@ print(group[::-1].idxmax())
 #the most recent year with the most observations is 2019, with 61
 dfc = dfc.query('year == 2019')
 
+#3
+
+ypc = dfc['cgdpo']/dfc['pop']
+ypw = dfc['cgdpo']/dfc['emp']
+yphw = ypw/dfc['avh']
+yphc = dfc['cgdpo']/dfc['hc']
+yphhc = yphw/dfc['hc']
+
 calc_table = pd.DataFrame(columns=['country','ypc', 'ypw', 'yphw', 'yphc', 'yphhc'])
 calc_table['country'] = dfc['country']
-calc_table['ypc'] = dfc['cgdpo']/dfc['pop']
-calc_table['ypw'] = dfc['cgdpo']/dfc['emp']
-calc_table['yphw'] = calc_table['ypw']/dfc['avh']
-calc_table['yphc'] = dfc['cgdpo']/dfc['hc']
-calc_table['yphhc'] = calc_table['yphw']/dfc['hc']
+calc_table['ypc'] = ypc
+calc_table['ypw'] = ypw
+calc_table['yphw'] = yphw
+calc_table['yphc'] = yphc
+calc_table['yphhc'] = yphhc
+
 calc_table = calc_table.round(decimals=2)
 print(calc_table.describe(percentiles = [0.95, 0.9, 0.1, 0.05]))
 
@@ -35,3 +44,12 @@ yphhc_ratios = [round(table.iloc[0]['yphhc']/table.iloc[5]['yphhc']), round(tabl
 
 ratio_table = pd.DataFrame(list(zip(ypc_ratios, ypw_ratios, yphw_ratios, yphc_ratios, yphhc_ratios)), columns = ['ypc', 'ypw', 'yphw', 'yphc', 'yphhc'])
 print(ratio_table)
+
+#5
+
+
+plt.scatter(np.log(ypw), dfc.avh)
+plt.show()
+
+
+#measures of success
