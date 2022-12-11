@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 df = pd.read_csv('https://raw.githubusercontent.com/jivizcaino/PWT_10.0/main/pwt100.csv', encoding="latin-1")
-df_subset = df[['country', 'countrycode', 'year', 'pop', 'cgdpo', 'emp', 'avh', 'hc', 'labsh', 'ctfp']]
+df_subset = df[['country', 'countrycode', 'year', 'pop', 'cgdpo', 'emp', 'avh', 'hc', 'labsh', 'ctfp', 'cn']]
 df_subset = df_subset.query('year>=2010')
 
 #remove entries with null values
@@ -51,5 +51,3 @@ print(ratio_table)
 plt.scatter(np.log(ypw), dfc.avh)
 plt.show()
 
-
-#measures of success
