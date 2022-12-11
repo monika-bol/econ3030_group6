@@ -39,8 +39,16 @@ def ratio(y):
     y_ratios = [round(table.iloc[0][y]/table.iloc[5][y]), round(table.iloc[1][y]/table.iloc[4][y]), round(table.iloc[2][y]/table.iloc[3][y])]
     return (y_ratios)
 
-ratio_table = pd.DataFrame(list(zip(ratio('ypc'), ratio('ypw'), ratio('yphw'), ratio('yphc'), ratio('yphhc'))), columns = ['ypc', 'ypw', 'yphw', 'yphc', 'yphhc'])
+ratio_table = pd.DataFrame(list(zip(ratio('ypc'), ratio('ypw'), ratio('yphw'), ratio('yphc'), ratio('yphhc'))), columns = ['ypc', 'ypw', 'yphw', 'yphc', 'yphhc'], index = ['rich/poor', '95/5', '90/10'] )
 print(ratio_table)
+
+def log_var(a):
+    return(np.log(calc_table[a].var()))
+
+log_var_table = pd.DataFrame(data = (log_var('ypc'), log_var('ypw'), log_var('yphw'), log_var('yphc'), log_var('yphhc')), columns = ['log variance'], index = ['ypc', 'ypw', 'yphw', 'yphc', 'yphhc'])
+print(log_var_table)
+
+#4
 
 #5
 
