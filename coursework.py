@@ -49,82 +49,17 @@ log_var_table = pd.DataFrame(data = (log_var('ypc'), log_var('ypw'), log_var('yp
 print(log_var_table)
 
 #5
-
-plt.subplot(5,5,1)
-plt.scatter(np.log(ypw), dfc.avh)
-
-plt.subplot(5,5,2)
-plt.scatter(np.log(ypw), dfc.cn)
-
-plt.subplot(5,5,3)
-plt.scatter(np.log(ypw), dfc.hc)
-
-plt.subplot(5,5,4)
-plt.scatter(np.log(ypw), 1-dfc['labsh'])
-
-plt.subplot(5,5,5)
-plt.scatter(np.log(ypw), dfc.ctfp)
-
-plt.subplot(5,5,6)
-plt.scatter(np.log(yphw), dfc.avh)
-
-plt.subplot(5,5,7)
-plt.scatter(np.log(yphw), dfc.cn)
-
-plt.subplot(5,5,8)
-plt.scatter(np.log(yphw), dfc.hc)
-
-plt.subplot(5,5,9)
-plt.scatter(np.log(yphw), 1-dfc['labsh'])
-
-plt.subplot(5,5,10)
-plt.scatter(np.log(yphw), dfc.ctfp)
-
-plt.subplot(5,5,11)
-plt.scatter(np.log(yphc), dfc.avh)
-
-plt.subplot(5,5,12)
-plt.scatter(np.log(yphc), dfc.cn)
-
-plt.subplot(5,5,13)
-plt.scatter(np.log(yphc), dfc.hc)
-
-plt.subplot(5,5,14)
-plt.scatter(np.log(yphc), 1-dfc['labsh'])
-
-plt.subplot(5,5,15)
-plt.scatter(np.log(yphc), dfc.ctfp)
-
-plt.subplot(5,5,16)
-plt.scatter(np.log(yphhc), dfc.avh)
-
-plt.subplot(5,5,17)
-plt.scatter(np.log(yphhc), dfc.cn)
-
-plt.subplot(5,5,18)
-plt.scatter(np.log(yphhc), dfc.hc)
-
-plt.subplot(5,5,19)
-plt.scatter(np.log(yphhc), 1-dfc['labsh'])
-
-plt.subplot(5,5,20)
-plt.scatter(np.log(yphhc), dfc.ctfp)
-
-plt.subplot(5,5,21)
-plt.scatter(np.log(ypc), dfc.avh)
-
-plt.subplot(5,5,22)
-plt.scatter(np.log(ypc), dfc.cn)
-
-plt.subplot(5,5,23)
-plt.scatter(np.log(ypc), dfc.hc)
-
-plt.subplot(5,5,24)
-plt.scatter(np.log(ypc), 1-dfc['labsh'])
-
-plt.subplot(5,5,25)
-plt.scatter(np.log(ypc), dfc.ctfp)
-
+x_axes = ypc, ypw, yphw, yphc, yphhc, ypw, ypc, ypw, yphw, yphc, yphhc, ypw, ypc, ypw, yphw, yphc, yphhc, ypw, ypc, ypw, yphw, yphc, yphhc, ypw, ypc, ypw, yphw, yphc, yphhc, ypw
+y_axes = dfc.avh, dfc.avh, dfc.avh, dfc.avh, dfc.avh, dfc.cn, dfc.cn, dfc.cn, dfc.cn, dfc.cn, dfc.hc, dfc.hc, dfc.hc, dfc.hc, dfc.hc, 1-dfc['labsh'], 1-dfc['labsh'], 1-dfc['labsh'], 1-dfc['labsh'], 1-dfc['labsh'], dfc.ctfp, dfc.ctfp, dfc.ctfp, dfc.ctfp, dfc.ctfp
+x_axes_labels = 'income per capita', 'income per worker', 'income per hour worked', 'income per unit human capital', 'income per hour human capital', 'income per capita', 'income per worker', 'income per hour worked', 'income per unit human capital', 'income per hour human capital', 'income per capita', 'income per worker', 'income per hour worked', 'income per unit human capital', 'income per hour human capital', 'income per capita', 'income per worker', 'income per hour worked', 'income per unit human capital', 'income per hour human capital', 'income per capita', 'income per worker', 'income per hour worked', 'income per unit human capital', 'income per hour human capital'
+y_axes_labels = 'average anual hours worked', 'average anual hours worked', 'average anual hours worked', 'average anual hours worked', 'average anual hours worked', 'physical capital', 'physical capital', 'physical capital', 'physical capital', 'physical capital', 'human capital', 'human capital', 'human capital', 'human capital', 'human capital', 'alpha', 'alpha', 'alpha', 'alpha', 'alpha', 'ctfp', 'ctfp', 'ctfp', 'ctfp', 'ctfp' 
+plt.figure(figsize=(10, 10))
+plt.rcParams.update({'font.size': 5})
+for i in range(0, 25):
+    plt.subplot(5, 5, i+1)
+    plt.scatter(np.log(x_axes[i]), y_axes[i], s = 2)
+    plt.xlabel(x_axes_labels[i], fontsize = 5)
+    plt.ylabel(y_axes_labels[i], fontsize = 5)
+plt.tight_layout()
 plt.show()
-#measures of success
 
