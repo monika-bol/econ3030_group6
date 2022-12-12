@@ -53,11 +53,12 @@ x_axes = ypc, ypw, yphw, yphhc, ypw, ypc, ypw, yphw, yphhc, ypw, ypc, ypw, yphw,
 y_axes = dfc.avh, dfc.avh, dfc.avh, dfc.avh, dfc.cn, dfc.cn, dfc.cn, dfc.cn, dfc.hc, dfc.hc, dfc.hc, dfc.hc, 1-dfc['labsh'], 1-dfc['labsh'], 1-dfc['labsh'], 1-dfc['labsh'], dfc.ctfp, dfc.ctfp, dfc.ctfp, dfc.ctfp
 x_axes_labels = 'income per capita', 'income per worker', 'income per hour worked', 'income per hour human capital', 'income per capita', 'income per worker', 'income per hour worked', 'income per hour human capital', 'income per capita', 'income per worker', 'income per hour worked', 'income per hour human capital', 'income per capita', 'income per worker', 'income per hour worked', 'income per hour human capital', 'income per capita', 'income per worker', 'income per hour worked', 'income per hour human capital'
 y_axes_labels = 'average anual hours worked', 'average anual hours worked', 'average anual hours worked', 'average anual hours worked', 'physical capital', 'physical capital', 'physical capital', 'physical capital', 'human capital', 'human capital', 'human capital', 'human capital', 'alpha', 'alpha', 'alpha', 'alpha', 'ctfp', 'ctfp', 'ctfp', 'ctfp' 
+colours = 'red', 'red', 'red', 'red', 'blue', 'blue', 'blue', 'blue', 'yellow', 'yellow', 'yellow', 'yellow', 'green', 'green', 'green', 'green', 'orange', 'orange', 'orange', 'orange'
 plt.figure(figsize=(10, 10))
 plt.rcParams.update({'font.size': 5})
 for i in range(0, 20):
-    plt.subplot(5, 5, i+1)
-    plt.scatter(np.log(x_axes[i]), y_axes[i], s = 2)
+    plt.subplot(5, 4, i+1)
+    plt.scatter(np.log(x_axes[i]), y_axes[i], s = 2, color = colours[i])
     plt.xlabel(x_axes_labels[i], fontsize = 5)
     plt.ylabel(y_axes_labels[i], fontsize = 5)
 plt.tight_layout()
