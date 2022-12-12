@@ -40,7 +40,7 @@ def log_var(a):
 log_var_table = pd.DataFrame(data = (log_var('ypc'), log_var('ypw'), log_var('yphw'), log_var('yphhc')), columns = ['log variance'], index = ['ypc', 'ypw', 'yphw', 'yphhc'])
 print(log_var_table)
 
-#4
+#4 (draft)
 #find from ratio table that the disparity of standard of living (shown in ypc ratio) tends to get smaller
 # once you take into account for yphw and then further as you account for yphhc
 # especially at the most extreme ends of measures. 
@@ -61,16 +61,13 @@ for i in range(0, 20):
     plt.ylabel(y_axes_labels[i], fontsize = 5)
 plt.tight_layout()
 plt.show()
+#need country code
 
 #6 
 ykh = np.power(dfc['cn'], (1-dfc['labsh']))*np.power((dfc['hc']/dfc['emp']),(dfc['labsh']))
-
 ykh_ypc = ykh/dfc['pop']
-
 ykh_ypw = ykh_ypc/dfc['emp']
-
 ykh_yphw = ykh_ypw/dfc['avh']
-
 ykh_yphhc = ykh_yphw/dfc['hc']
 
 def success_1(y, ykh):
@@ -78,12 +75,18 @@ def success_1(y, ykh):
     var_log_ykh = (np.log([ykh])).var()
     return var_log_ykh/var_log_y
 
-success_1 (ypc, ykh_ypc)
-success_1 (ypw, ykh_ypw)
-success_1(yphw, ykh_yphw)
-success_1(yphhc, ykh_yphhc)
+print('Using Y_kh...')
+print('Success measure 1 for ypc: ', success_1 (ypc, ykh_ypc))
+print('Success measure 1 for ypw: ', success_1 (ypw, ykh_ypw))
+print('Success measure 1 for yphw: ', success_1(yphw, ykh_yphw))
+print('Success measure 1 for yphhc: ', success_1(yphhc, ykh_yphhc))
+
+#this is just to test which way round to do
+print ((np.log(ypc)).var())
+print (np.log(ypc.var()))
 
 def success_2(y, ykh):
+
 
 #7 
 #are diffs in standards of livimg across countries mostly driven by factor accumulation
@@ -91,10 +94,20 @@ def success_2(y, ykh):
 
 #do results depend on measure used?
 
-#how does it differ from those in Caselli - We use a measure for 1-alpha 
-#being labsh, whereas Caselli uses a constant value of 0.666 for 1-alpha
-#this means for caselli, the success measures are less than 1, whereas our results
-# for success are larger than 1 
+#how does it differ from those in Caselli - 
+#ANSWER We use a measure for 1-alpha being labsh, whereas Caselli uses a constant value of 0.666 for 1-alpha
+#this means for caselli, the success measures are less than 1, whereas our results for success are larger than 1 
 
 #8 
-#compute tfp only for per cap (ypc) measure - then compare to ykh_ypc success calcs
+#As instructed in office hour, only need to compare the GDP per capita measure using TFP vs Y_kh
+tfp = dfc['ctfp']/dfc['pop']
+print('Using TFP...')
+print('Success measure 1 for ypc: ', success_1(ypc, tfp))
+print('Success measure 2 for ypc: ', success_2(,) )
+
+# Find that the success measure is lower than when we use Y_kh, 
+#meaning that (compare production factors impacts income differences more than productivity ??)
+#need to compare to caselli 
+
+#9
+#think we need to make subsets for what part of dataset to use?
