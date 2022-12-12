@@ -35,7 +35,8 @@ ratio_table = pd.DataFrame(list(zip(ratio('ypc'), ratio('ypw'), ratio('yphw'), r
 print(ratio_table)
 
 def log_var(a):
-    return(np.log(calc_table[a].var()))
+    return((np.log(calc_table[a])).var())
+    
 
 log_var_table = pd.DataFrame(data = (log_var('ypc'), log_var('ypw'), log_var('yphw'), log_var('yphhc')), columns = ['log variance'], index = ['ypc', 'ypw', 'yphw', 'yphhc'])
 print(log_var_table)
@@ -81,9 +82,6 @@ print('Success measure 1 for ypw: ', success_1 (ypw, ykh_ypw))
 print('Success measure 1 for yphw: ', success_1(yphw, ykh_yphw))
 print('Success measure 1 for yphhc: ', success_1(yphhc, ykh_yphhc))
 
-#this is just to test which way round to do
-print ((np.log(ypc)).var())
-print (np.log(ypc.var()))
 
 def success_2(y, ykh):
 
