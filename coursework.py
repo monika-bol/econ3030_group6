@@ -55,12 +55,14 @@ x_axes_labels = 'income per capita', 'income per worker', 'income per hour worke
 y_axes_labels = 'average anual hours worked', 'average anual hours worked', 'average anual hours worked', 'average anual hours worked', 'physical capital', 'physical capital', 'physical capital', 'physical capital', 'human capital', 'human capital', 'human capital', 'human capital', 'alpha', 'alpha', 'alpha', 'alpha', 'ctfp', 'ctfp', 'ctfp', 'ctfp' 
 colours = 'red', 'red', 'red', 'red', 'blue', 'blue', 'blue', 'blue', 'yellow', 'yellow', 'yellow', 'yellow', 'green', 'green', 'green', 'green', 'orange', 'orange', 'orange', 'orange'
 plt.figure(figsize=(10, 10))
-plt.rcParams.update({'font.size': 5})
+plt.rcParams.update({'font.size':3})
 for i in range(0, 20):
     plt.subplot(5, 4, i+1)
     plt.scatter(np.log(x_axes[i]), y_axes[i], s = 2, color = colours[i])
     plt.xlabel(x_axes_labels[i], fontsize = 5)
     plt.ylabel(y_axes_labels[i], fontsize = 5)
+    for a, txt in enumerate(dfc.countrycode):
+        plt.annotate(txt, (np.log(x_axes[i].reset_index()[0][a]), y_axes[i].reset_index(drop = True)[a]))
 plt.tight_layout()
 plt.show()
 #need country code
@@ -109,4 +111,4 @@ print('Success measure 2 for ypc: ', success_2(,) )
 #need to compare to caselli 
 
 #9
-#think we need to make subsets for what part of dataset to use?
+#think we need to make subsets for what part of dataset to use?#think we need to make subsets for what part of dataset to use?
