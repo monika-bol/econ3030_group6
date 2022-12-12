@@ -23,13 +23,7 @@ ypw = dfc['cgdpo']/dfc['emp']
 yphw = ypw/dfc['avh']
 yphhc = yphw/dfc['hc']
 
-calc_table = pd.DataFrame(columns=['country','ypc', 'ypw', 'yphw', 'yphhc'])
-calc_table['country'] = dfc['country']
-calc_table['ypc'] = ypc
-calc_table['ypw'] = ypw
-calc_table['yphw'] = yphw
-calc_table['yphhc'] = yphhc
-calc_table = calc_table.round(decimals=2)
+calc_table = pd.DataFrame(list(zip(dfc['country'], ypc, ypw, yphw, yphhc)), columns=['country','ypc', 'ypw', 'yphw', 'yphhc']).round(decimals=2)
 print(calc_table.describe(percentiles = [0.95, 0.9, 0.1, 0.05]))
 
 table = calc_table.quantile([1, 0.95, 0.9, 0.1, 0.05, 0])
@@ -43,7 +37,7 @@ print(ratio_table)
 def log_var(a):
     return(np.log(calc_table[a].var()))
 
-log_var_table = pd.DataFrame(data = (log_var('ypc'), log_var('ypw'), log_var('yphw'), log_var('yphc'), log_var('yphhc')), columns = ['log variance'], index = ['ypc', 'ypw', 'yphw', 'yphhc'])
+log_var_table = pd.DataFrame(data = (log_var('ypc'), log_var('ypw'), log_var('yphw'), log_var('yphhc')), columns = ['log variance'], index = ['ypc', 'ypw', 'yphw', 'yphhc'])
 print(log_var_table)
 
 #4
@@ -55,12 +49,12 @@ print(log_var_table)
 
 #5
 x_axes = ypc, ypw, yphw, yphhc, ypw, ypc, ypw, yphw, yphhc, ypw, ypc, ypw, yphw, yphhc, ypw, ypc, ypw, yphw, yphhc, ypw, ypc, ypw, yphw, yphhc, ypw
-y_axes = dfc.avh, dfc.avh, dfc.avh, dfc.avh, dfc.avh, dfc.cn, dfc.cn, dfc.cn, dfc.cn, dfc.cn, dfc.hc, dfc.hc, dfc.hc, dfc.hc, dfc.hc, 1-dfc['labsh'], 1-dfc['labsh'], 1-dfc['labsh'], 1-dfc['labsh'], 1-dfc['labsh'], dfc.ctfp, dfc.ctfp, dfc.ctfp, dfc.ctfp, dfc.ctfp
+y_axes = dfc.avh, dfc.avh, dfc.avh, dfc.avh, dfc.cn, dfc.cn, dfc.cn, dfc.cn, dfc.hc, dfc.hc, dfc.hc, dfc.hc, 1-dfc['labsh'], 1-dfc['labsh'], 1-dfc['labsh'], 1-dfc['labsh'], dfc.ctfp, dfc.ctfp, dfc.ctfp, dfc.ctfp
 x_axes_labels = 'income per capita', 'income per worker', 'income per hour worked', 'income per hour human capital', 'income per capita', 'income per worker', 'income per hour worked', 'income per hour human capital', 'income per capita', 'income per worker', 'income per hour worked', 'income per hour human capital', 'income per capita', 'income per worker', 'income per hour worked', 'income per hour human capital', 'income per capita', 'income per worker', 'income per hour worked', 'income per hour human capital'
-y_axes_labels = 'average anual hours worked', 'average anual hours worked', 'average anual hours worked', 'average anual hours worked', 'physical capital', 'physical capital', 'physical capital', 'physical capital', 'physical capital', 'human capital', 'human capital', 'human capital', 'human capital', 'human capital', 'alpha', 'alpha', 'alpha', 'alpha', 'alpha', 'ctfp', 'ctfp', 'ctfp', 'ctfp', 'ctfp' 
+y_axes_labels = 'average anual hours worked', 'average anual hours worked', 'average anual hours worked', 'average anual hours worked', 'physical capital', 'physical capital', 'physical capital', 'physical capital', 'human capital', 'human capital', 'human capital', 'human capital', 'alpha', 'alpha', 'alpha', 'alpha', 'ctfp', 'ctfp', 'ctfp', 'ctfp' 
 plt.figure(figsize=(10, 10))
 plt.rcParams.update({'font.size': 5})
-for i in range(0, 25):
+for i in range(0, 20):
     plt.subplot(5, 5, i+1)
     plt.scatter(np.log(x_axes[i]), y_axes[i], s = 2)
     plt.xlabel(x_axes_labels[i], fontsize = 5)
