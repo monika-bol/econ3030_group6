@@ -86,8 +86,16 @@ print('Success measure 1 for yphw: ', success_1(yphw, ykh_yphw))
 print('Success measure 1 for yphhc: ', success_1(yphhc, ykh_yphhc))
 
 
-def success_2(y, ykh):
+def success_2(y, ykh, u, l):
+    ykh_u = ykh.quantile([u])[u]
+    ykh_l = ykh.quantile([l])[l]
+    y_u = y.quantile([u])[u]
+    y_l = y.quantile([l])[l]
+    return (ykh_u/ykh_l)/(y_u/y_l)
 
+success_2_table = pd.DataFrame(data = ([success_2(ypc, ykh_ypc, 0.9, 0.1), success_2(ypc, ykh_ypc, 0.99, 0.01), success_2(ypc, ykh_ypc, 0.95, 0.05), success_2(ypc, ykh_ypc, 0.75, 0.25)], [success_2(ypw, ykh_ypw, 0.9, 0.1), success_2(ypw, ykh_ypw, 0.99, 0.01), success_2(ypw, ykh_ypw, 0.95, 0.05), success_2(ypw, ykh_ypw, 0.75, 0.25)], [success_2(yphw, ykh_yphw, 0.9, 0.1), success_2(yphw, ykh_yphw, 0.99, 0.01), success_2(yphw, ykh_yphw, 0.95, 0.05), success_2(yphw, ykh_yphw, 0.75, 0.25)], [success_2(yphhc, ykh_yphhc, 0.9, 0.1), success_2(yphhc, ykh_yphhc, 0.99, 0.01), success_2(yphhc, ykh_yphhc, 0.95, 0.05), success_2(yphhc, ykh_yphhc, 0.75, 0.25)]), columns = ['90th-10th', '99th-1st', '95th-5th', '75th-25th'], index = ['ypc', 'ypw', 'yphw', 'yphhc'])
+                    
+print(success_2_table.round(decimals = 2))
 
 #7 
 #are diffs in standards of livimg across countries mostly driven by factor accumulation
