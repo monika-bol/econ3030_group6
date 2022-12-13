@@ -112,7 +112,7 @@ print(success_2_table.round(decimals = 2))
 tfp = dfc['ctfp']/dfc['pop']
 print('Using TFP...')
 print('Success measure 1 for ypc: ', success_1(ypc, tfp))
-print('Success measure 2 for ypc: ', success_2(,) )
+print('Success measure 2 for ypc for the 90th and 10th percentile: ', success_2(ypc, tfp, 0.9, 0.1))
 
 # Find that the success measure is lower than when we use Y_kh, 
 #meaning that (compare production factors impacts income differences more than productivity ??)
