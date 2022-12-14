@@ -7,8 +7,9 @@ df_subset = df[['country', 'countrycode', 'year', 'pop', 'cgdpo', 'emp', 'avh', 
 df_subset = df_subset.query('year>=2010')
 
 #remove entries with null values
+
+print(df_subset.describe().round(decimals=2))
 dfc = df_subset.dropna()
-print(dfc.describe().round(decimals=2))
 
 group = dfc.groupby(['year'])
 group = group.count()
@@ -94,7 +95,8 @@ def success_2(y, ykh, u, l):
     return (ykh_u/ykh_l)/(y_u/y_l)
 
 success_2_table = pd.DataFrame(data = ([success_2(ypc, ykh_ypc, 0.9, 0.1), success_2(ypc, ykh_ypc, 0.99, 0.01), success_2(ypc, ykh_ypc, 0.95, 0.05), success_2(ypc, ykh_ypc, 0.75, 0.25)], [success_2(ypw, ykh_ypw, 0.9, 0.1), success_2(ypw, ykh_ypw, 0.99, 0.01), success_2(ypw, ykh_ypw, 0.95, 0.05), success_2(ypw, ykh_ypw, 0.75, 0.25)], [success_2(yphw, ykh_yphw, 0.9, 0.1), success_2(yphw, ykh_yphw, 0.99, 0.01), success_2(yphw, ykh_yphw, 0.95, 0.05), success_2(yphw, ykh_yphw, 0.75, 0.25)], [success_2(yphhc, ykh_yphhc, 0.9, 0.1), success_2(yphhc, ykh_yphhc, 0.99, 0.01), success_2(yphhc, ykh_yphhc, 0.95, 0.05), success_2(yphhc, ykh_yphhc, 0.75, 0.25)]), columns = ['90th-10th', '99th-1st', '95th-5th', '75th-25th'], index = ['ypc', 'ypw', 'yphw', 'yphhc'])
-                    
+              
+print('Success measure 2: ')                    
 print(success_2_table.round(decimals = 2))
 
 #7 
@@ -119,7 +121,6 @@ print('Success measure 2 for ypc for the 90th and 10th percentile: ', success_2(
 #need to compare to caselli 
 
 #9
-#think we need to make subsets for what part of dataset to use?#think we need to make subsets for what part of dataset to use?
 dfc['ypc'] = ypc
 europe_list = ['Estonia', 'Slovenia', 'Czech Republic', 'Malta', 'Spain', 'Italy', 'France', 'United Kingdom', 'Finland', 'Belgium', 'Germany', 'Sweden', 'Austria', 'Iceland', 'Denmark', 'Netherlands' 'Norway', 'Switzerland', 'Luxembourg', 'Ireland', 'Lithuania', 'Cyprus', 'Poland', 'Portugal', 'Latvia', 'Hungary', 'Russian Federation', 'Romania', 'Slovakia', 'Greece', 'Croatia', 'Bulgaria']
 asia_oceania_list = ['Israel', 'India', 'Philippines', 'Indonesia', 'Sri Lanka', 'China', 'Thailand', 'Malaysia', 'Japan', 'Republic of Korea', 'Taiwan', 'China, Hong Kong SAR', 'Singapore', 'Australia', 'New Zealand']
@@ -156,6 +157,6 @@ for n, i in enumerate(different_subsets):
     print('Success measure 1 for yphhc: ', success_1(yphhc, ykh_yphhc))
 
     success_2_table = pd.DataFrame(data = ([success_2(ypc, ykh_ypc, 0.9, 0.1), success_2(ypc, ykh_ypc, 0.99, 0.01), success_2(ypc, ykh_ypc, 0.95, 0.05), success_2(ypc, ykh_ypc, 0.75, 0.25)], [success_2(ypw, ykh_ypw, 0.9, 0.1), success_2(ypw, ykh_ypw, 0.99, 0.01), success_2(ypw, ykh_ypw, 0.95, 0.05), success_2(ypw, ykh_ypw, 0.75, 0.25)], [success_2(yphw, ykh_yphw, 0.9, 0.1), success_2(yphw, ykh_yphw, 0.99, 0.01), success_2(yphw, ykh_yphw, 0.95, 0.05), success_2(yphw, ykh_yphw, 0.75, 0.25)], [success_2(yphhc, ykh_yphhc, 0.9, 0.1), success_2(yphhc, ykh_yphhc, 0.99, 0.01), success_2(yphhc, ykh_yphhc, 0.95, 0.05), success_2(yphhc, ykh_yphhc, 0.75, 0.25)]), columns = ['90th-10th', '99th-1st', '95th-5th', '75th-25th'], index = ['ypc', 'ypw', 'yphw', 'yphhc'])
-                    
+    print('Success measure 2: ')                
     print(success_2_table.round(decimals = 2))
     dfc = dfc_original
