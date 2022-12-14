@@ -6,8 +6,7 @@ df = pd.read_csv('https://raw.githubusercontent.com/jivizcaino/PWT_10.0/main/pwt
 df_subset = df[['country', 'countrycode', 'year', 'pop', 'cgdpo', 'emp', 'avh', 'hc', 'labsh', 'ctfp', 'cn']]
 df_subset = df_subset.query('year>=2010')
 
-#remove entries with null values
-
+#2
 print(df_subset.describe().round(decimals=2))
 dfc = df_subset.dropna()
 
@@ -42,13 +41,6 @@ def log_var(a):
 log_var_table = pd.DataFrame(data = (log_var('ypc'), log_var('ypw'), log_var('yphw'), log_var('yphhc')), columns = ['log variance'], index = ['ypc', 'ypw', 'yphw', 'yphhc'])
 print(log_var_table)
 
-#4 (draft)
-#find from ratio table that the disparity of standard of living (shown in ypc ratio) tends to get smaller
-# once you take into account for yphw and then further as you account for yphhc
-# especially at the most extreme ends of measures. 
-# accounting for hours worked meant reduction by 1 unit, and a further 3 units once human capital (hc) per hour worked is considered
-
-
 #5
 x_axes = ypc, ypw, yphw, yphhc, ypw, ypc, ypw, yphw, yphhc, ypw, ypc, ypw, yphw, yphhc, ypw, ypc, ypw, yphw, yphhc, ypw, ypc, ypw, yphw, yphhc, ypw
 y_axes = dfc.avh, dfc.avh, dfc.avh, dfc.avh, dfc.cn, dfc.cn, dfc.cn, dfc.cn, dfc.hc, dfc.hc, dfc.hc, dfc.hc, 1-dfc['labsh'], 1-dfc['labsh'], 1-dfc['labsh'], 1-dfc['labsh'], dfc.ctfp, dfc.ctfp, dfc.ctfp, dfc.ctfp
@@ -66,7 +58,6 @@ for i in range(0, 20):
         plt.annotate(txt, (np.log(x_axes[i].reset_index()[0][a]), y_axes[i].reset_index(drop = True)[a]))
 plt.tight_layout()
 plt.show()
-#need country code
 
 #6 
 ykh = np.power(dfc['cn'], (1-dfc['labsh']))*np.power((dfc['hc']/dfc['emp']),(dfc['labsh']))
@@ -99,26 +90,12 @@ success_2_table = pd.DataFrame(data = ([success_2(ypc, ykh_ypc, 0.9, 0.1), succe
 print('Success measure 2: ')                    
 print(success_2_table.round(decimals = 2))
 
-#7 
-#are diffs in standards of livimg across countries mostly driven by factor accumulation
-#or efficiency in factors used?
-
-#do results depend on measure used?
-
-#how does it differ from those in Caselli - 
-#ANSWER We use a measure for 1-alpha being labsh, whereas Caselli uses a constant value of 0.666 for 1-alpha
-#this means for caselli, the success measures are less than 1, whereas our results for success are larger than 1 
-
 #8 
 #As instructed in office hour, only need to compare the GDP per capita measure using TFP vs Y_kh
 tfp = dfc['ctfp']/dfc['pop']
 print('Using TFP...')
 print('Success measure 1 for ypc: ', success_1(ypc, tfp))
 print('Success measure 2 for ypc for the 90th and 10th percentile: ', success_2(ypc, tfp, 0.9, 0.1))
-
-# Find that the success measure is lower than when we use Y_kh, 
-#meaning that (compare production factors impacts income differences more than productivity ??)
-#need to compare to caselli 
 
 #9
 dfc['ypc'] = ypc
@@ -133,10 +110,13 @@ OECD_countries_list = ['Australia', 'Austria', 'Belgium', 'Canada', 'Chile', 'Co
 non_OECD_countries_list = ['Singapore', 'Malta', 'Tawian', 'China', 'India', 'Philippines', 'Ecuador', 'Indonesia', 'Peru', 'South Africa', 'Sri Lanka', 'Brazil', 'Thailand', 'Dominican Republic', 'Costa Rica', 'Uruguay', 'Bulgaria', 'Argentina', 'Malaysia', 'Croatia', 'Romania', 'Russian Federation', 'Cyprus']
 
 different_subsets = europe_list, asia_oceania_list, americas_list, above_median_list, below_median_list, OECD_countries_list, non_OECD_countries_list
-subsets_names = "europe", "asia", "americas", "countries above median", "countries below median", "oecd countries", "non-oecd countries"
 
-for n, i in enumerate(different_subsets):
-    print("results for", subsets_names[n])
+success_1_measures = np.empty(0)
+success_2_measures = np.empty(0)
+y_var_logs = np.empty(0)
+ykh_var_logs = np.empty(0)
+
+for i in (different_subsets):
     dfc = dfc[dfc['country'].isin(i)]
     ypc = dfc['cgdpo']/dfc['pop']
     ypw = dfc['cgdpo']/dfc['emp']
@@ -149,14 +129,14 @@ for n, i in enumerate(different_subsets):
     ykh_ypw = ykh_ypc/dfc['emp']
     ykh_yphw = ykh_ypw/dfc['avh']
     ykh_yphhc = ykh_yphw/dfc['hc']
-
-    print('Using Y_kh...')
-    print('Success measure 1 for ypc: ', success_1 (ypc, ykh_ypc))
-    print('Success measure 1 for ypw: ', success_1 (ypw, ykh_ypw))
-    print('Success measure 1 for yphw: ', success_1(yphw, ykh_yphw))
-    print('Success measure 1 for yphhc: ', success_1(yphhc, ykh_yphhc))
-
-    success_2_table = pd.DataFrame(data = ([success_2(ypc, ykh_ypc, 0.9, 0.1), success_2(ypc, ykh_ypc, 0.99, 0.01), success_2(ypc, ykh_ypc, 0.95, 0.05), success_2(ypc, ykh_ypc, 0.75, 0.25)], [success_2(ypw, ykh_ypw, 0.9, 0.1), success_2(ypw, ykh_ypw, 0.99, 0.01), success_2(ypw, ykh_ypw, 0.95, 0.05), success_2(ypw, ykh_ypw, 0.75, 0.25)], [success_2(yphw, ykh_yphw, 0.9, 0.1), success_2(yphw, ykh_yphw, 0.99, 0.01), success_2(yphw, ykh_yphw, 0.95, 0.05), success_2(yphw, ykh_yphw, 0.75, 0.25)], [success_2(yphhc, ykh_yphhc, 0.9, 0.1), success_2(yphhc, ykh_yphhc, 0.99, 0.01), success_2(yphhc, ykh_yphhc, 0.95, 0.05), success_2(yphhc, ykh_yphhc, 0.75, 0.25)]), columns = ['90th-10th', '99th-1st', '95th-5th', '75th-25th'], index = ['ypc', 'ypw', 'yphw', 'yphhc'])
-    print('Success measure 2: ')                
-    print(success_2_table.round(decimals = 2))
+    
+    y_var_logs = np.append(y_var_logs, ((np.log([ypc])).var()))
+    ykh_var_logs = np.append(ykh_var_logs, ((np.log([ykh_ypc])).var()))
+    success_1_measures = np.append(success_1_measures, (success_1(ypc, ykh_ypc)))
+    success_2_measures = np.append(success_2_measures, (success_2(ypc, ykh_ypc, 0.9, 0.1)))
+    
     dfc = dfc_original
+
+subsets_table = pd.DataFrame(list(zip(y_var_logs, ykh_var_logs, success_1_measures, success_2_measures)), columns=['var log(y)', 'var log(ykh)', 'success 1', 'success 2'], index = ['europe', 'asia', 'americas', 'above median', 'below median', 'oecd', 'non-oecd'] )
+print(subsets_table.round(decimals=2))
+
