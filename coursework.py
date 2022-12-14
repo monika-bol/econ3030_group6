@@ -8,14 +8,14 @@ df_subset = df_subset.query('year>=2010')
 
 #remove entries with null values
 dfc = df_subset.dropna()
-print(dfc.describe())
+print(dfc.describe().round(decimals=2))
 
 group = dfc.groupby(['year'])
 group = group.count()
 print(group[::-1].idxmax())
 #the most recent year with the most observations is 2019, with 61
 dfc = dfc.query('year == 2019')
-
+dfc_original = dfc
 #3
 
 ypc = dfc['cgdpo']/dfc['pop']
@@ -24,7 +24,7 @@ yphw = ypw/dfc['avh']
 yphhc = yphw/dfc['hc']
 
 calc_table = pd.DataFrame(list(zip(dfc['country'], ypc, ypw, yphw, yphhc)), columns=['country','ypc', 'ypw', 'yphw', 'yphhc']).round(decimals=2)
-print(calc_table.describe(percentiles = [0.95, 0.9, 0.1, 0.05]))
+print(calc_table.describe(percentiles = [0.95, 0.9, 0.1, 0.05]).round(decimals=2))
 
 table = calc_table.quantile([1, 0.95, 0.9, 0.1, 0.05, 0])
 def ratio(y):
@@ -120,3 +120,42 @@ print('Success measure 2 for ypc for the 90th and 10th percentile: ', success_2(
 
 #9
 #think we need to make subsets for what part of dataset to use?#think we need to make subsets for what part of dataset to use?
+dfc['ypc'] = ypc
+europe_list = ['Estonia', 'Slovenia', 'Czech Republic', 'Malta', 'Spain', 'Italy', 'France', 'United Kingdom', 'Finland', 'Belgium', 'Germany', 'Sweden', 'Austria', 'Iceland', 'Denmark', 'Netherlands' 'Norway', 'Switzerland', 'Luxembourg', 'Ireland', 'Lithuania', 'Cyprus', 'Poland', 'Portugal', 'Latvia', 'Hungary', 'Russian Federation', 'Romania', 'Slovakia', 'Greece', 'Croatia', 'Bulgaria']
+asia_oceania_list = ['Israel', 'India', 'Philippines', 'Indonesia', 'Sri Lanka', 'China', 'Thailand', 'Malaysia', 'Japan', 'Republic of Korea', 'Taiwan', 'China, Hong Kong SAR', 'Singapore', 'Australia', 'New Zealand']
+americas_list = ['Ecuador', 'Peru', 'Colombia', 'Brazil', 'Dominican Republic', 'Costa Rica', 'Mexico', 'Uruguay', 'Argentina', 'Chile', 'Canada', 'United States']
+above_median = dfc.sort_values('ypc').reset_index(drop=True).query('index>30')
+above_median_list = above_median.country.tolist()
+below_median = dfc.sort_values('ypc').reset_index(drop=True).query('index<=30')
+below_median_list = below_median.country.tolist()
+OECD_countries_list = ['Australia', 'Austria', 'Belgium', 'Canada', 'Chile', 'Colombia', 'Costa Rica', 'Czech Republic', 'Denmark', 'Estonia', 'Finland', 'France', 'Germany', 'Greece', 'Hungary', 'Iceland', 'Ireland', 'Israel', 'Italy', 'Japan', 'Korea', 'Latvia', 'Lithuania', 'Luxembourg', 'Mexico', 'Netherlands', 'New Zealand', 'Norway', 'Poland', 'Portugal', 'Slovak Republic', 'Slovenia', 'Spain', 'Sweden', 'Switzerland', 'Turkey', 'United Kingdom', 'United States']
+non_OECD_countries_list = ['Singapore', 'Malta', 'Tawian', 'China', 'India', 'Philippines', 'Ecuador', 'Indonesia', 'Peru', 'South Africa', 'Sri Lanka', 'Brazil', 'Thailand', 'Dominican Republic', 'Costa Rica', 'Uruguay', 'Bulgaria', 'Argentina', 'Malaysia', 'Croatia', 'Romania', 'Russian Federation', 'Cyprus']
+
+different_subsets = europe_list, asia_oceania_list, americas_list, above_median_list, below_median_list, OECD_countries_list, non_OECD_countries_list
+subsets_names = "europe", "asia", "americas", "countries above median", "countries below median", "oecd countries", "non-oecd countries"
+
+for n, i in enumerate(different_subsets):
+    print("results for", subsets_names[n])
+    dfc = dfc[dfc['country'].isin(i)]
+    ypc = dfc['cgdpo']/dfc['pop']
+    ypw = dfc['cgdpo']/dfc['emp']
+    yphw = ypw/dfc['avh']
+    yphhc = yphw/dfc['hc']
+    
+    calc_table = pd.DataFrame(list(zip(dfc['country'], ypc, ypw, yphw, yphhc)), columns=['country','ypc', 'ypw', 'yphw', 'yphhc']).round(decimals=2)
+    ykh = np.power(dfc['cn'], (1-dfc['labsh']))*np.power((dfc['hc']/dfc['emp']),(dfc['labsh']))
+    ykh_ypc = ykh/dfc['pop']
+    ykh_ypw = ykh_ypc/dfc['emp']
+    ykh_yphw = ykh_ypw/dfc['avh']
+    ykh_yphhc = ykh_yphw/dfc['hc']
+
+    print('Using Y_kh...')
+    print('Success measure 1 for ypc: ', success_1 (ypc, ykh_ypc))
+    print('Success measure 1 for ypw: ', success_1 (ypw, ykh_ypw))
+    print('Success measure 1 for yphw: ', success_1(yphw, ykh_yphw))
+    print('Success measure 1 for yphhc: ', success_1(yphhc, ykh_yphhc))
+
+    success_2_table = pd.DataFrame(data = ([success_2(ypc, ykh_ypc, 0.9, 0.1), success_2(ypc, ykh_ypc, 0.99, 0.01), success_2(ypc, ykh_ypc, 0.95, 0.05), success_2(ypc, ykh_ypc, 0.75, 0.25)], [success_2(ypw, ykh_ypw, 0.9, 0.1), success_2(ypw, ykh_ypw, 0.99, 0.01), success_2(ypw, ykh_ypw, 0.95, 0.05), success_2(ypw, ykh_ypw, 0.75, 0.25)], [success_2(yphw, ykh_yphw, 0.9, 0.1), success_2(yphw, ykh_yphw, 0.99, 0.01), success_2(yphw, ykh_yphw, 0.95, 0.05), success_2(yphw, ykh_yphw, 0.75, 0.25)], [success_2(yphhc, ykh_yphhc, 0.9, 0.1), success_2(yphhc, ykh_yphhc, 0.99, 0.01), success_2(yphhc, ykh_yphhc, 0.95, 0.05), success_2(yphhc, ykh_yphhc, 0.75, 0.25)]), columns = ['90th-10th', '99th-1st', '95th-5th', '75th-25th'], index = ['ypc', 'ypw', 'yphw', 'yphhc'])
+                    
+    print(success_2_table.round(decimals = 2))
+    dfc = dfc_original
